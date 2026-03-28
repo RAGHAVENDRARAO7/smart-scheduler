@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Scheduler</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #38bdf8;
+    }
+
+    .container {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 12px;
+      width: 400px;
+      margin: auto;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    input, select {
+      width: 90%;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #38bdf8;
+      border: none;
+      border-radius: 6px;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0ea5e9;
+    }
+
+    #result {
+      margin-top: 20px;
+      text-align: left;
+      background: #020617;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🧠 Smart Scheduler</h1>
+
+  <div class="container">
+
+    <input type="text" id="time" placeholder="Proposed Time (e.g. 11:00)">
+    
+    <input type="number" id="duration" placeholder="Duration (minutes)">
+    
+    <select id="decision">
+      <option value="schedule">Schedule</option>
+      <option value="reject">Reject</option>
+    </select>
+
+    <input type="text" id="message" placeholder="Message">
+
+    <button onclick="runScheduler()">Run Scheduler</button>
+
+    <div id="result">Result will appear here...</div>
+
+  </div>
+
+  <script>
+    async function runScheduler() {
+  const payload = {
+    proposed_time: document.getElementById("time").value,
+    duration: parseInt(document.getElementById("duration").value),
+    decision: document.getElementById("decision").value,
+    message: document.getElementById("message").value
+  };
+
+  try {
+    const response = await fetch("/step", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const text = await response.text();
+
+    try {
+      const data = JSON.parse(text);
+      document.getElementById("result").innerText =
+        JSON.stringify(data, null, 2);
+    } catch {
+      document.getElementById("result").innerText =
+        "Server Error:\n" + text;
+    }
+
+  } catch (error) {
+    document.getElementById("result").innerText =
+      "Request Failed: " + error;
+  }
+}
+  </script>
+
+</body>
+</html>

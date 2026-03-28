@@ -1,0 +1,23 @@
+id: smart-scheduler
+name: Smart Scheduler Environment
+description: RL environment for scheduling tasks with constraints and preferences
+entry_point: main:app
+
+tasks:
+  - id: easy_basic_scheduling
+    description: Schedule meeting with simple constraints
+
+  - id: medium_conflict_resolution
+    description: Resolve scheduling conflicts
+
+  - id: hard_multi_turn
+    description: Multi-turn scheduling with uncertainty
+
+api:
+  reset: POST /reset
+  step: POST /step
+  state: GET /state
+
+observation_model: Observation
+action_model: Action
+reward_model: Reward
